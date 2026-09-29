@@ -1,0 +1,46 @@
+{
+  "temperature_forecaster": {
+    "model_type": "GradientBoostingRegressor",
+    "split_strategy": "Chronological (Train: 2015-2023, Test: 2024-2025)",
+    "metrics": {
+      "rmse": 1.9868,
+      "mae": 1.5804,
+      "r2_score": 0.9853
+    },
+    "artifact": "temp_forecaster.joblib"
+  },
+  "anomaly_detector": {
+    "model_type": "IsolationForest + RobustScaler",
+    "contamination": 0.06,
+    "metrics": {
+      "precision": 0.0535,
+      "recall": 0.1448,
+      "f1_score": 0.0781,
+      "total_anomalies_flagged": 2411,
+      "anomaly_rate_pct": 6.0,
+      "confusion_matrix": [
+        [
+          37007,
+          2282
+        ],
+        [
+          762,
+          129
+        ]
+      ],
+      "mean_anomaly_score": 35.28,
+      "max_anomaly_score": 83.64
+    },
+    "artifact": "anomaly_detector.joblib"
+  },
+  "impact_regressor": {
+    "model_type": "RandomForestRegressor",
+    "target": "Climate Vulnerability Risk Index (0-100)",
+    "metrics": {
+      "rmse": 1.981,
+      "mae": 0.965,
+      "r2_score": 0.9564
+    },
+    "artifact": "impact_model.joblib"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "temp_heatwave_c": 38,
+  "temp_arctic_anomaly_c": 6,
+  "co2_critical_ppm": 440,
+  "wind_storm_kmh": 65,
+  "pm25_unhealthy_ugm3": 55,
+  "pressure_cyclone_drop_hpa": 988,
+  "email_notifications": true,
+  "sms_broadcast": false
+}

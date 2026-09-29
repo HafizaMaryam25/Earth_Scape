@@ -1,0 +1,90 @@
+[
+  {
+    "ticket_id": "TCK-813",
+    "title": "test",
+    "category": "General",
+    "priority": "LOW",
+    "status": "OPEN",
+    "author": "EarthScape Analyst",
+    "station_id": "GLOBAL",
+    "created_at": "2026-09-16 10:55:25",
+    "description": "test"
+  },
+  {
+    "ticket_id": "TCK-819",
+    "title": "Audit Verification Ticket",
+    "category": "General Inquiry",
+    "priority": "LOW",
+    "status": "OPEN",
+    "author": "EarthScape Analyst",
+    "station_id": "GLOBAL",
+    "created_at": "2026-09-15 23:34:00",
+    "description": "Automated verification test."
+  },
+  {
+    "ticket_id": "TCK-897",
+    "title": "Audit Verification Ticket",
+    "category": "General Inquiry",
+    "priority": "LOW",
+    "status": "OPEN",
+    "author": "EarthScape Analyst",
+    "station_id": "GLOBAL",
+    "created_at": "2026-09-15 23:32:53",
+    "description": "Automated verification test."
+  },
+  {
+    "ticket_id": "TCK-811",
+    "title": "Audit Test Ticket",
+    "category": "General Inquiry",
+    "priority": "LOW",
+    "status": "OPEN",
+    "author": "EarthScape Analyst",
+    "station_id": "GLOBAL",
+    "created_at": "2026-09-15 23:19:29",
+    "description": "Automated test ticket from audit."
+  },
+  {
+    "ticket_id": "TCK-906",
+    "title": "test",
+    "category": "Infrastructure",
+    "priority": "MEDIUM",
+    "status": "RESOLVED",
+    "author": "Chief Operations Lead",
+    "station_id": "WS-NAT-04",
+    "created_at": "2026-08-31 22:13:03",
+    "description": "testing"
+  },
+  {
+    "ticket_id": "TCK-801",
+    "title": "Temperature sensor calibration drift at Manaus Canopy Tower",
+    "category": "Sensor Calibration",
+    "priority": "HIGH",
+    "status": "RESOLVED",
+    "author": "Dr. Elena Rostova (Lead Meteorologist)",
+    "station_id": "WS-AMZ-03",
+    "created_at": "2026-08-30 09:15:00",
+    "description": "Observed a +1.8\u00b0C nocturnal baseline offset relative to eddy covariance tower. Needs field recalibration."
+  },
+  {
+    "ticket_id": "TCK-802",
+    "title": "HDFS block replication warning on DataNode-03",
+    "category": "Infrastructure",
+    "priority": "MEDIUM",
+    "status": "RESOLVED",
+    "author": "Marcus Vance (Systems Architect)",
+    "station_id": "ALL",
+    "created_at": "2026-08-29 14:30:00",
+    "description": "Transient network partition triggered automated under-replication alert. Self-healed across rack-2."
+  },
+  {
+    "ticket_id": "TCK-803",
+    "title": "Request for NetCDF format export in Polar Climate analysis",
+    "category": "Feature Request",
+    "priority": "LOW",
+    "status": "RESOLVED",
+    "author": "Prof. T. Lindholm (Arctic Research Council)",
+    "station_id": "WS-ARC-01",
+    "created_at": "2026-08-31 11:20:00",
+    "description": "Analyst team requires gridded NetCDF4 exports for multi-decadal sea-ice albedo comparison studies."
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "station_id": "WS-ARC-01",
+    "zone_id": "Z01",
+    "name": "Svalbard Arctic Observatory",
+    "lat": 78.22,
+    "lon": 15.65,
+    "elevation_m": 120,
+    "sensor_count": 24,
+    "status": "ACTIVE",
+    "firmware_version": "v4.2.1"
+  },
+  {
+    "station_id": "WS-SAH-02",
+    "zone_id": "Z02",
+    "name": "Kufra Desert Climate Hub",
+    "lat": 23.41,
+    "lon": 25.66,
+    "elevation_m": 416,
+    "sensor_count": 18,
+    "status": "ACTIVE",
+    "firmware_version": "v3.9.0"
+  },
+  {
+    "station_id": "WS-AMZ-03",
+    "zone_id": "Z03",
+    "name": "Manaus Canopy Tower",
+    "lat": -3.46,
+    "lon": -62.21,
+    "elevation_m": 85,
+    "sensor_count": 32,
+    "status": "ACTIVE",
+    "firmware_version": "v4.5.0"
+  },
+  {
+    "station_id": "WS-NAT-04",
+    "zone_id": "Z04",
+    "name": "Azores Oceanographic Buoy",
+    "lat": 45.1,
+    "lon": -30.2,
+    "elevation_m": 0,
+    "sensor_count": 16,
+    "status": "ACTIVE",
+    "firmware_version": "v4.1.2"
+  },
+  {
+    "station_id": "WS-IND-05",
+    "zone_id": "Z05",
+    "name": "Gulf of Thailand Coastal Station",
+    "lat": 12.87,
+    "lon": 100.52,
+    "elevation_m": 12,
+    "sensor_count": 28,
+    "status": "ACTIVE",
+    "firmware_version": "v4.4.1"
+  },
+  {
+    "station_id": "WS-HIM-06",
+    "zone_id": "Z06",
+    "name": "Khumbu Glacier Met Station",
+    "lat": 28.0,
+    "lon": 86.85,
+    "elevation_m": 5050,
+    "sensor_count": 22,
+    "status": "ACTIVE",
+    "firmware_version": "v3.8.4"
+  },
+  {
+    "station_id": "WS-EUR-07",
+    "zone_id": "Z07",
+    "name": "Paris Basin Agro-Climatic Center",
+    "lat": 48.85,
+    "lon": 2.35,
+    "elevation_m": 55,
+    "sensor_count": 30,
+    "status": "ACTIVE",
+    "firmware_version": "v4.6.0"
+  },
+  {
+    "station_id": "WS-NAC-08",
+    "zone_id": "Z08",
+    "name": "Great Lakes Environmental Base",
+    "lat": 41.87,
+    "lon": -87.62,
+    "elevation_m": 182,
+    "sensor_count": 26,
+    "status": "ACTIVE",
+    "firmware_version": "v4.3.3"
+  },
+  {
+    "station_id": "WS-SAH-09",
+    "zone_id": "Z09",
+    "name": "Niamey Sahelian Research Station",
+    "lat": 14.49,
+    "lon": 14.45,
+    "elevation_m": 227,
+    "sensor_count": 20,
+    "status": "ACTIVE",
+    "firmware_version": "v4.0.1"
+  },
+  {
+    "station_id": "WS-AUS-10",
+    "zone_id": "Z10",
+    "name": "Alice Springs Arid Observatory",
+    "lat": -25.27,
+    "lon": 133.77,
+    "elevation_m": 546,
+    "sensor_count": 24,
+    "status": "ACTIVE",
+    "firmware_version": "v4.2.0"
+  }
+]

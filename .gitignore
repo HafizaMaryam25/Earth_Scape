@@ -1,0 +1,91 @@
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# ==============================
+# Environment & Secrets
+# ==============================
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================
+# IDE / Editor
+# ==============================
+.vscode/
+.idea/
+*.code-workspace
+
+# ==============================
+# Jupyter
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# Python Packaging
+# ==============================
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ==============================
+# Generated / Processed Data
+# Keep data/raw in Git; generated
+# processing outputs can be recreated.
+# ==============================
+data/processed/hdfs_partitions/
+data/processed/mr_results/
+data/processed/climate_master_cleaned.csv
+data/processed/hdfs_cluster_state.json
+data/processed/hdfs_partition_manifest.json
+data/processed/ingestion_metadata.json
+
+# Keep the directory itself in Git
+!data/processed/.gitkeep
+
+# ==============================
+# Temporary / Generated Files
+# ==============================
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Coverage / Testing
+# ==============================
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+coverage.json
+
+# ==============================
+# Local Server / Runtime Files
+# ==============================
+*.pid
+*.lock
+
+# Keep trained ML model artifacts
+# because the application uses them
+# for inference.

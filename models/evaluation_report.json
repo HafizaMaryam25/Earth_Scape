@@ -1,0 +1,36 @@
+{
+  "forecaster": {
+    "metrics": {
+      "rmse": 1.9868,
+      "mae": 1.5804,
+      "r2_score": 0.9853
+    },
+    "residual_mean": -0.5273,
+    "residual_std": 1.9156,
+    "test_sample_count": 7310
+  },
+  "anomaly_detector": {
+    "precision": 0.0535,
+    "recall": 0.1448,
+    "f1_score": 0.0781,
+    "total_anomalies_flagged": 2411,
+    "anomaly_rate_pct": 6.0,
+    "confusion_matrix": [
+      [
+        37007,
+        2282
+      ],
+      [
+        762,
+        129
+      ]
+    ],
+    "mean_anomaly_score": 35.28,
+    "max_anomaly_score": 83.64
+  },
+  "impact_regressor": {
+    "r2_score": 0.9768,
+    "rmse": 1.4682,
+    "mae": 0.6545
+  }
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "zone_id": "Z01",
+    "name": "Arctic Polar Region",
+    "lat": 78.22,
+    "lon": 15.65,
+    "base_temp": -12.5,
+    "warming_rate": 0.085,
+    "base_precip": 35.0,
+    "climate_type": "Polar"
+  },
+  {
+    "zone_id": "Z02",
+    "name": "Sahara Arid Basin",
+    "lat": 23.41,
+    "lon": 25.66,
+    "base_temp": 31.0,
+    "warming_rate": 0.048,
+    "base_precip": 4.0,
+    "climate_type": "Hyper-Arid"
+  },
+  {
+    "zone_id": "Z03",
+    "name": "Amazon Tropical Rainforest",
+    "lat": -3.46,
+    "lon": -62.21,
+    "base_temp": 27.2,
+    "warming_rate": 0.038,
+    "base_precip": 240.0,
+    "climate_type": "Tropical Rainforest"
+  },
+  {
+    "zone_id": "Z04",
+    "name": "North Atlantic Marine",
+    "lat": 45.1,
+    "lon": -30.2,
+    "base_temp": 11.8,
+    "warming_rate": 0.042,
+    "base_precip": 95.0,
+    "climate_type": "Oceanic"
+  },
+  {
+    "zone_id": "Z05",
+    "name": "Indo-Pacific Monsoon Basin",
+    "lat": 12.87,
+    "lon": 100.52,
+    "base_temp": 28.5,
+    "warming_rate": 0.045,
+    "base_precip": 180.0,
+    "climate_type": "Tropical Monsoon"
+  },
+  {
+    "zone_id": "Z06",
+    "name": "Himalayan Alpine Region",
+    "lat": 28.0,
+    "lon": 86.85,
+    "base_temp": -2.4,
+    "warming_rate": 0.065,
+    "base_precip": 70.0,
+    "climate_type": "Alpine Tundra"
+  },
+  {
+    "zone_id": "Z07",
+    "name": "Western European Temperate",
+    "lat": 48.85,
+    "lon": 2.35,
+    "base_temp": 12.2,
+    "warming_rate": 0.04,
+    "base_precip": 65.0,
+    "climate_type": "Temperate Maritime"
+  },
+  {
+    "zone_id": "Z08",
+    "name": "North American Continental",
+    "lat": 41.87,
+    "lon": -87.62,
+    "base_temp": 10.5,
+    "warming_rate": 0.041,
+    "base_precip": 82.0,
+    "climate_type": "Humid Continental"
+  },
+  {
+    "zone_id": "Z09",
+    "name": "Sub-Saharan Sahel Region",
+    "lat": 14.49,
+    "lon": 14.45,
+    "base_temp": 29.8,
+    "warming_rate": 0.052,
+    "base_precip": 45.0,
+    "climate_type": "Semi-Arid"
+  },
+  {
+    "zone_id": "Z10",
+    "name": "Australian Outback",
+    "lat": -25.27,
+    "lon": 133.77,
+    "base_temp": 24.5,
+    "warming_rate": 0.046,
+    "base_precip": 25.0,
+    "climate_type": "Arid Continental"
+  }
+]

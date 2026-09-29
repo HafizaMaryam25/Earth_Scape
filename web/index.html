@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarthScape Climate Agency - Global Big Data Analytics & Prediction Platform</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Leaflet Map CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <link rel="stylesheet" href="/web/styles.css">
+</head>
+<body class="theme-dark">
+    <!-- Background Animated Aurora Glow -->
+    <div class="glow-bg-top"></div>
+    <div class="glow-bg-bottom"></div>
+
+    <!-- Login Screen -->
+    <div class="login-overlay" id="login-overlay">
+        <div class="login-card">
+            <div class="login-brand">
+                <i data-lucide="globe-2" class="login-brand-icon"></i>
+                <h1 class="login-brand-title">EarthScape</h1>
+                <p class="login-brand-subtitle">Climate Big Data Agency</p>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email Address:</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password:</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <div id="login-error" class="login-error" style="display:none;"></div>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">
+                    <i data-lucide="log-in"></i>
+                    <span>Sign In</span>
+                </button>
+            </form>
+            <div class="login-switch">
+                Don't have an account? <a href="#" onclick="showRegisterForm(); return false;">Register as Analyst</a>
+            </div>
+
+            <!-- Registration Form (hidden by default) -->
+            <form id="register-form" onsubmit="handleRegister(event)" style="display:none;">
+                <div class="form-group">
+                    <label class="form-label">Full Name:</label>
+                    <input type="text" id="register-name" class="form-input" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address:</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="Your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password:</label>
+                    <input type="password" id="register-password" class="form-input" placeholder="Choose a password (min 4 chars)" minlength="4" required>
+                </div>
+                <div id="register-error" class="login-error" style="display:none;"></div>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">
+                    <i data-lucide="user-plus"></i>
+                    <span>Create Account</span>
+                </button>
+            </form>
+            <div class="login-switch" id="register-switch" style="display:none;">
+                Already have an account? <a href="#" onclick="showLoginForm(); return false;">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-layout" id="app-layout" style="display:none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-container">
+                <div class="brand-logo">
+                    <i data-lucide="globe-2" class="brand-icon"></i>
+                </div>
+                <div class="brand-text">
+                    <h1 class="brand-title">EarthScape</h1>
+                    <span class="brand-subtitle">Climate Big Data Agency</span>
+                </div>
+            </div>
+
+            <!-- User Info & Logout -->
+            <div class="role-selector-card">
+                <div class="role-header">
+                    <span class="role-label">Role:</span>
+                    <span id="active-role-badge" class="badge badge-admin">Administrator</span>
+                </div>
+                <div id="user-email-display" style="font-size: 12px; color: #94a3b8; margin: 4px 0; word-break: break-all;"></div>
+                <button class="btn btn-sm btn-secondary" onclick="handleLogout()" style="margin-top: 8px; width: 100%;">
+                    <i data-lucide="log-out"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="switchTab('vitals')" id="nav-vitals">
+                    <i data-lucide="activity"></i>
+                    <span>Global Vitals</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('stations')" id="nav-stations">
+                    <i data-lucide="map-pin"></i>
+                    <span>Weather Stations & Map</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('mapreduce')" id="nav-mapreduce">
+                    <i data-lucide="cpu"></i>
+                    <span>Hadoop & MapReduce</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('ml-sandbox')" id="nav-ml-sandbox">
+                    <i data-lucide="sparkles"></i>
+                    <span>AI Climate Sandbox</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('streaming')" id="nav-streaming">
+                    <i data-lucide="radio"></i>
+                    <span>Live IoT Stream</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('alerts')" id="nav-alerts">
+                    <i data-lucide="bell-ring"></i>
+                    <span>Early Warnings</span>
+                    <span class="nav-counter" id="nav-alert-counter">3</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('tickets')" id="nav-tickets">
+                    <i data-lucide="help-circle"></i>
+                    <span>Support & Feedback</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('system')" id="nav-system">
+                    <i data-lucide="server"></i>
+                    <span>Cluster Health</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="cluster-pill">
+                    <span class="status-dot pulsating"></span>
+                    <span class="cluster-text">HDFS Node Cluster: 4/4 Online</span>
+                </div>
+                <div class="clock-display" id="live-clock">UTC --:--:--</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 class="page-title" id="page-title">Global Climate Vital Signs</h2>
+                    <p class="page-description" id="page-desc">Synchronous multi-sensor telemetry, satellite observations, and long-term anomalies</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-stat-tag">
+                        <span class="stat-tag-label">Total Records:</span>
+                        <span class="stat-tag-val" id="header-records">40,180</span>
+                    </div>
+                    <div class="header-stat-tag">
+                        <span class="stat-tag-label">Ingestion State:</span>
+                        <span class="stat-tag-val tag-green">SYNCHRONIZED</span>
+                    </div>
+                    <button class="btn btn-secondary btn-icon-only" onclick="refreshCurrentTab()" title="Refresh Data">
+                        <i data-lucide="refresh-cw" id="refresh-icon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ============================================================ -->
+            <!-- TAB 1: GLOBAL VITALS & OVERVIEW -->
+            <!-- ============================================================ -->
+            <section id="tab-vitals" class="tab-pane active">
+                <!-- KPI Vital Cards Grid -->
+                <div class="kpi-grid">
+                    <div class="kpi-card glow-cyan">
+                        <div class="kpi-icon-wrap bg-cyan-dim">
+                            <i data-lucide="thermometer-sun" class="text-cyan"></i>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Global Temp Anomaly</span>
+                            <div class="kpi-val-row">
+                                <span class="kpi-value text-cyan" id="kpi-temp-anom">+1.28 °C</span>
+                                <span class="kpi-delta delta-up">▲ 0.03°C/yr</span>
+                            </div>
+                            <span class="kpi-context">vs 1850-1900 Pre-Industrial baseline</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-emerald">
+                        <div class="kpi-icon-wrap bg-emerald-dim">
+                            <i data-lucide="cloud-rain" class="text-emerald"></i>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Atmospheric CO2</span>
+                            <div class="kpi-val-row">
+                                <span class="kpi-value text-emerald" id="kpi-co2">424.5 ppm</span>
+                                <span class="kpi-delta delta-up">▲ 2.4 ppm/yr</span>
+                            </div>
+                            <span class="kpi-context">Mauna Loa / Global Ingestion Grid</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-amber">
+                        <div class="kpi-icon-wrap bg-amber-dim">
+                            <i data-lucide="snowflake" class="text-amber"></i>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Arctic Sea Ice Extent</span>
+                            <div class="kpi-val-row">
+                                <span class="kpi-value text-amber" id="kpi-sea-ice">4.15 M km²</span>
+                                <span class="kpi-delta delta-down">▼ 11.2% / decade</span>
+                            </div>
+                            <span class="kpi-context">Satellite Cryosphere Radiometry</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-crimson">
+                        <div class="kpi-icon-wrap bg-crimson-dim">
+                            <i data-lucide="trees" class="text-crimson"></i>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Global Deforestation</span>
+                            <div class="kpi-val-row">
+                                <span class="kpi-value text-crimson" id="kpi-deforest">10.40 M ha/yr</span>
+                                <span class="kpi-delta delta-down">▼ 1.2% reduction</span>
+                            </div>
+                            <span class="kpi-context">Landsat & Sentinel Forest Canopy Scan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card flex-2">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Multi-Year Climate Trajectory</h3>
+                                <p class="card-subtitle">Aggregated surface temperature trends and greenhouse gas concentrations (2015-2025)</p>
+                            </div>
+                            <div class="chart-controls">
+                                <select id="vitals-zone-select" class="form-select-sm" onchange="loadHistoricalChart()">
+                                    <option value="ALL">All Global Zones (Average)</option>
+                                    <option value="Z01">Arctic Polar Region (Z01)</option>
+                                    <option value="Z02">Sahara Arid Basin (Z02)</option>
+                                    <option value="Z03">Amazon Rainforest (Z03)</option>
+                                    <option value="Z04">North Atlantic Marine (Z04)</option>
+                                    <option value="Z05">Indo-Pacific Monsoon (Z05)</option>
+                                    <option value="Z06">Himalayan Alpine (Z06)</option>
+                                    <option value="Z07">Western European Temperate (Z07)</option>
+                                    <option value="Z08">North American Continental (Z08)</option>
+                                    <option value="Z09">Sub-Saharan Sahel (Z09)</option>
+                                    <option value="Z10">Australian Outback (Z10)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-container">
+                            <canvas id="historicalChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card flex-1">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Atmospheric GHG Composition</h3>
+                                <p class="card-subtitle">CO2 vs CH4 vs N2O Concentration Trend</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-container">
+                            <canvas id="ghgCompositionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regional Summary Table -->
+                <div class="card table-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3 class="card-title">10 Global Meteorological Zones Overview</h3>
+                            <p class="card-subtitle">Partitioned HDFS blocks and station baseline observations</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline" onclick="exportZoneDataCSV()">
+                            <i data-lucide="download"></i>
+                            <span>Export Zone Data</span>
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="zones-table">
+                            <thead>
+                                <tr>
+                                    <th>Zone ID</th>
+                                    <th>Zone Name</th>
+                                    <th>Coordinates</th>
+                                    <th>Climate Classification</th>
+                                    <th>Base Temp</th>
+                                    <th>Warming Rate</th>
+                                    <th>Partition Blocks</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="zones-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 2: WEATHER STATIONS & GEOSPATIAL MAP -->
+            <!-- ============================================================ -->
+            <section id="tab-stations" class="tab-pane">
+                <div class="map-view-container">
+                    <div class="map-sidebar">
+                        <div class="card-header-flex">
+                            <h3 class="card-title">Station Registry</h3>
+                            <span class="badge badge-info" id="active-stations-count">10 Active</span>
+                        </div>
+                        <input type="text" id="station-search" class="form-input" placeholder="Search station or zone..." oninput="filterStationList()">
+                        <div class="station-list" id="station-list-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="map-canvas-card">
+                        <div id="climate-map"></div>
+                        <div class="map-legend">
+                            <span class="legend-item"><span class="legend-dot dot-green"></span> Normal (&lt; 25°C)</span>
+                            <span class="legend-item"><span class="legend-dot dot-amber"></span> Elevated (25°C - 35°C)</span>
+                            <span class="legend-item"><span class="legend-dot dot-red"></span> Extreme (&gt; 35°C / Anomaly)</span>
+                            <span class="legend-item"><span class="legend-dot dot-cyan"></span> Polar (&lt; 0°C)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 3: HADOOP HDFS & MAPREDUCE CONSOLE -->
+            <!-- ============================================================ -->
+            <section id="tab-mapreduce" class="tab-pane">
+                <div class="grid-2-col">
+                    <!-- MapReduce Execution Controller -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">MapReduce Job Dispatcher</h3>
+                                <p class="card-subtitle">Execute parallel batch computation across partitioned HDFS blocks</p>
+                            </div>
+                            <span class="badge badge-primary">Hadoop MapReduce 3.3.6</span>
+                        </div>
+
+                        <form id="mr-form" onsubmit="executeMapReduceJob(event)">
+                            <div class="form-group">
+                                <label class="form-label">Select MapReduce Job:</label>
+                                <select id="mr-job-select" class="form-select" onchange="updateMRJobDesc()">
+                                    <option value="job_temp_anomalies">1. Temperature Anomaly & Rolling Baseline Climatology</option>
+                                    <option value="job_ghg_emissions">2. Greenhouse Gas Emissions & Warming Correlation</option>
+                                    <option value="job_extreme_events">3. Extreme Weather Event & Climate Risk Indexing</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Partition Filter (Zone Scope):</label>
+                                <select id="mr-zone-filter" class="form-select">
+                                    <option value="ALL">All Distributed Partitions (Full Cluster 110 Blocks)</option>
+                                    <option value="Z01">Zone Z01 (Arctic Polar)</option>
+                                    <option value="Z02">Zone Z02 (Sahara Basin)</option>
+                                    <option value="Z03">Zone Z03 (Amazon Basin)</option>
+                                    <option value="Z05">Zone Z05 (Indo-Pacific)</option>
+                                    <option value="Z06">Zone Z06 (Himalayas)</option>
+                                </select>
+                            </div>
+
+                            <div class="job-info-box" id="mr-job-description">
+                                <strong>Job Architecture:</strong> Computes 30-day baseline monthly normals per zone in parallel mappers, then reducers emit deviations &Delta;T.
+                            </div>
+
+                            <button type="submit" id="btn-run-mr" class="btn btn-primary btn-block">
+                                <i data-lucide="play"></i>
+                                <span>Execute MapReduce Distributed Pipeline</span>
+                            </button>
+                        </form>
+
+                        <!-- Live Pipeline Stage Monitor -->
+                        <div class="mr-stages-container" id="mr-stages" style="display:none;">
+                            <h4 class="section-subheading">Pipeline Execution Stages</h4>
+                            <div class="stage-item" id="stage-input">
+                                <div class="stage-info">
+                                    <span>1. Input Splitting & HDFS Block Read</span>
+                                    <span class="stage-status" id="stage-input-status">READY</span>
+                                </div>
+                                <div class="progress-bar-wrap"><div class="progress-bar" id="bar-input"></div></div>
+                            </div>
+
+                            <div class="stage-item" id="stage-map">
+                                <div class="stage-info">
+                                    <span>2. Parallel Mapper Phase (16 Worker Tasks)</span>
+                                    <span class="stage-status" id="stage-map-status">PENDING</span>
+                                </div>
+                                <div class="progress-bar-wrap"><div class="progress-bar" id="bar-map"></div></div>
+                            </div>
+
+                            <div class="stage-item" id="stage-shuffle">
+                                <div class="stage-info">
+                                    <span>3. Shuffle, Partition & Distributed Sort</span>
+                                    <span class="stage-status" id="stage-shuffle-status">PENDING</span>
+                                </div>
+                                <div class="progress-bar-wrap"><div class="progress-bar" id="bar-shuffle"></div></div>
+                            </div>
+
+                            <div class="stage-item" id="stage-reduce">
+                                <div class="stage-info">
+                                    <span>4. Reducer Aggregation & Sink to HDFS</span>
+                                    <span class="stage-status" id="stage-reduce-status">PENDING</span>
+                                </div>
+                                <div class="progress-bar-wrap"><div class="progress-bar" id="bar-reduce"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HDFS Cluster State & Job Results -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <h3 class="card-title">HDFS Storage & Execution Metrics</h3>
+                            <span class="badge badge-success" id="mr-status-pill">STANDBY</span>
+                        </div>
+
+                        <div class="cluster-summary-grid">
+                            <div class="stat-mini-card">
+                                <span class="mini-label">DataNodes Online</span>
+                                <span class="mini-val text-cyan">4 / 4</span>
+                            </div>
+                            <div class="stat-mini-card">
+                                <span class="mini-label">Replication Factor</span>
+                                <span class="mini-val text-emerald">3x (Fault Tolerant)</span>
+                            </div>
+                            <div class="stat-mini-card">
+                                <span class="mini-label">HDFS Total Blocks</span>
+                                <span class="mini-val text-amber" id="hdfs-total-blocks">110 Blocks</span>
+                            </div>
+                            <div class="stat-mini-card">
+                                <span class="mini-label">Cluster Throughput</span>
+                                <span class="mini-val text-purple" id="mr-throughput">42,500 rec/s</span>
+                            </div>
+                        </div>
+
+                        <div class="results-preview-wrap">
+                            <h4 class="section-subheading">Latest Output Sample (JSON / CSV Format)</h4>
+                            <pre class="json-code-box" id="mr-results-json">{\n  "message": "Select a job and click 'Execute MapReduce Distributed Pipeline' to process data."\n}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 4: AI & MACHINE LEARNING PREDICTION SANDBOX -->
+            <!-- ============================================================ -->
+            <section id="tab-ml-sandbox" class="tab-pane">
+                <div class="grid-2-col">
+                    <!-- ML Forecaster Simulator -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Climate Trend Forecaster</h3>
+                                <p class="card-subtitle">Gradient Boosting Regressor with Chronological Validation (R²=0.985)</p>
+                            </div>
+                            <span class="badge badge-cyan">Model: GradientBoosting</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Select Target Climatic Zone:</label>
+                            <select id="ml-forecast-zone" class="form-select" onchange="runMLForecast()">
+                                <option value="Z01">Zone Z01 - Arctic Polar Region</option>
+                                <option value="Z02">Zone Z02 - Sahara Arid Basin</option>
+                                <option value="Z03">Zone Z03 - Amazon Tropical Rainforest</option>
+                                <option value="Z05">Zone Z05 - Indo-Pacific Monsoon</option>
+                                <option value="Z07">Zone Z07 - Western European Temperate</option>
+                                <option value="Z08">Zone Z08 - North American Continental</option>
+                            </select>
+                        </div>
+
+                        <div class="slider-control-group">
+                            <div class="slider-header">
+                                <label class="form-label">Forecast Horizon (Target Year):</label>
+                                <span class="slider-val" id="val-target-year">2035</span>
+                            </div>
+                            <input type="range" id="slider-target-year" min="2026" max="2050" value="2035" step="1" class="form-range" oninput="updateSlider('target-year', this.value); runMLForecast();">
+                        </div>
+
+                        <div class="slider-control-group">
+                            <div class="slider-header">
+                                <label class="form-label">CO2 Concentration Scenario (ppm):</label>
+                                <span class="slider-val" id="val-co2-scenario">460 ppm</span>
+                            </div>
+                            <input type="range" id="slider-co2-scenario" min="400" max="600" value="460" step="5" class="form-range" oninput="updateSlider('co2-scenario', this.value); runMLForecast();">
+                        </div>
+
+                        <div class="chart-canvas-container" style="height: 260px; margin-top: 15px;">
+                            <canvas id="forecastChart"></canvas>
+                        </div>
+
+                        <div class="forecast-impact-badge" id="forecast-delta-box">
+                            Projected Warming Delta: <strong id="forecast-delta-val">+1.45 °C</strong> (95% CI: ±0.85°C)
+                        </div>
+                    </div>
+
+                    <!-- Anomaly Detection & Impact Analysis -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Real-Time Anomaly Scoring & Risk</h3>
+                                <p class="card-subtitle">Isolation Forest Classifier & Multi-Factor Impact Regressor</p>
+                            </div>
+                            <span class="badge badge-amber">Isolation Forest</span>
+                        </div>
+
+                        <form id="anomaly-test-form" onsubmit="testAnomalyModel(event)">
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="form-label">Surface Temp (°C):</label>
+                                    <input type="number" id="test-temp" class="form-input" value="46.5" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Precipitation (mm):</label>
+                                    <input type="number" id="test-precip" class="form-input" value="0.0" step="0.1">
+                                </div>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="form-label">Relative Humidity (%):</label>
+                                    <input type="number" id="test-humidity" class="form-input" value="12.0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Atmospheric Pressure (hPa):</label>
+                                    <input type="number" id="test-pressure" class="form-input" value="1008.0" step="0.5">
+                                </div>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="form-label">CO2 Concentration (ppm):</label>
+                                    <input type="number" id="test-co2" class="form-input" value="485.0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Wind Speed (km/h):</label>
+                                    <input type="number" id="test-wind" class="form-input" value="38.0" step="1">
+                                </div>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="form-label">Solar Irradiance (W/m²):</label>
+                                    <input type="number" id="test-solar" class="form-input" value="280.0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Aerosol Optical Depth:</label>
+                                    <input type="number" id="test-aerosol" class="form-input" value="0.15" step="0.01">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-accent btn-block">
+                                <i data-lucide="scan-line"></i>
+                                <span>Evaluate Anomaly Intensity & Risk</span>
+                            </button>
+                        </form>
+
+                        <!-- Anomaly Score Result Output -->
+                        <div class="anomaly-result-box" id="anomaly-result-box" style="margin-top: 15px;">
+                            <div class="anomaly-header">
+                                <span>Anomaly Intensity Score:</span>
+                                <span class="anomaly-tag tag-red" id="anomaly-classification">CRITICAL ANOMALY</span>
+                            </div>
+                            <div class="gauge-container">
+                                <div class="gauge-fill" id="anomaly-gauge-fill" style="width: 86%;"></div>
+                            </div>
+                            <div class="anomaly-score-text">
+                                Score: <strong id="anomaly-score-num">86.4 / 100</strong> (Model Confidence: <span id="anomaly-confidence">92.4%</span>)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Model / Climate Vulnerability -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3 class="card-title">Climate Impact & Vulnerability Risk Assessment</h3>
+                            <p class="card-subtitle">Multi-factor Random Forest regressor predicting ecosystem vulnerability (R²=0.956)</p>
+                        </div>
+                        <span class="badge badge-crimson">Random Forest Regressor</span>
+                    </div>
+
+                    <form id="impact-form" onsubmit="testImpactModel(event)">
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">CO2 Concentration (ppm):</label>
+                                <input type="number" id="impact-co2" class="form-input" value="430.0" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CH4 Concentration (ppb):</label>
+                                <input type="number" id="impact-ch4" class="form-input" value="1920.0" step="1">
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Deforestation Rate (M ha/yr):</label>
+                                <input type="number" id="impact-deforest" class="form-input" value="11.5" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Fossil Fuel Emissions (GtCO2):</label>
+                                <input type="number" id="impact-fossil" class="form-input" value="34.0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Arctic Sea Ice Extent (M km²):</label>
+                            <input type="number" id="impact-ice" class="form-input" value="4.2" step="0.1">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i data-lucide="alert-triangle"></i>
+                            <span>Evaluate Climate Vulnerability Risk</span>
+                        </button>
+                    </form>
+
+                    <div class="impact-result-box" id="impact-result-box" style="display:none; margin-top: 15px;">
+                        <div class="impact-header">
+                            <span>Climate Vulnerability Index:</span>
+                            <span class="anomaly-tag" id="impact-tier-tag">HIGH RISK</span>
+                        </div>
+                        <div class="gauge-container">
+                            <div class="gauge-fill" id="impact-gauge-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="impact-metrics-grid">
+                            <div class="impact-metric-item">
+                                <span class="impact-metric-label">Risk Score:</span>
+                                <span class="impact-metric-val" id="impact-risk-score">--</span>
+                            </div>
+                            <div class="impact-metric-item">
+                                <span class="impact-metric-label">Extreme Event Multiplier:</span>
+                                <span class="impact-metric-val" id="impact-event-mult">--</span>
+                            </div>
+                            <div class="impact-metric-item">
+                                <span class="impact-metric-label">Sea Level Rise Trajectory:</span>
+                                <span class="impact-metric-val" id="impact-sea-level">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 5: REAL-TIME IOT SENSOR STREAM -->
+            <!-- ============================================================ -->
+            <section id="tab-streaming" class="tab-pane">
+                <div class="card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3 class="card-title">Live Environmental IoT Sensor Stream</h3>
+                            <p class="card-subtitle">Sub-second telemetry ingestion across global meteorological observation nodes</p>
+                        </div>
+                        <div class="stream-controls">
+                            <button class="btn btn-sm btn-primary" id="btn-stream-toggle" onclick="toggleStreaming()">
+                                <i data-lucide="pause" id="stream-toggle-icon"></i>
+                                <span id="stream-toggle-text">Pause Stream</span>
+                            </button>
+                            <span class="badge badge-success" id="stream-live-pill">LIVE (1.5s interval)</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Stream Chart -->
+                    <div class="chart-canvas-container" style="height: 280px;">
+                        <canvas id="liveStreamChart"></canvas>
+                    </div>
+
+                    <!-- Live Telemetry Packets Feed -->
+                    <h4 class="section-subheading" style="margin-top: 20px;">Incoming Telemetry Feed</h4>
+                    <div class="stream-feed-container" id="stream-feed-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 6: AUTOMATED EARLY WARNINGS & ALERTS -->
+            <!-- ============================================================ -->
+            <section id="tab-alerts" class="tab-pane">
+                <div class="grid-2-col">
+                    <!-- Active Alerts Feed -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Active Climate Emergency Warnings</h3>
+                                <p class="card-subtitle">Automated triggers matching predefined scientific thresholds</p>
+                            </div>
+                            <span class="badge badge-crimson" id="alerts-count-badge">3 Active</span>
+                        </div>
+
+                        <div class="alerts-feed-list" id="alerts-feed-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Alert Threshold Configuration (Admin / Analyst Role) -->
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Threshold Parameter Configuration</h3>
+                                <p class="card-subtitle">Configure automated alerting rules for global stations</p>
+                            </div>
+                            <span class="badge badge-admin" id="config-role-badge">Admin & Analyst Only</span>
+                        </div>
+
+                        <form id="alert-config-form" onsubmit="saveAlertConfig(event)">
+                            <div class="form-group">
+                                <label class="form-label">Heatwave Trigger Threshold (°C):</label>
+                                <input type="number" id="cfg-temp-heatwave" class="form-input" value="38.0" step="0.5">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Arctic Temperature Anomaly (°C):</label>
+                                <input type="number" id="cfg-arctic-anom" class="form-input" value="6.0" step="0.5">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">CO2 Critical Breach Threshold (ppm):</label>
+                                <input type="number" id="cfg-co2-critical" class="form-input" value="440.0" step="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Severe Storm Wind Speed (km/h):</label>
+                                <input type="number" id="cfg-wind-storm" class="form-input" value="65.0" step="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">PM2.5 Unhealthy Threshold (µg/m³):</label>
+                                <input type="number" id="cfg-pm25" class="form-input" value="55.0" step="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Cyclone Pressure Threshold (hPa):</label>
+                                <input type="number" id="cfg-pressure" class="form-input" value="988.0" step="1">
+                            </div>
+
+                            <div class="form-check-group">
+                                <label class="form-checkbox">
+                                    <input type="checkbox" id="cfg-email" checked>
+                                    <span>Dispatch automated email digest to regional agencies</span>
+                                </label>
+                                <label class="form-checkbox">
+                                    <input type="checkbox" id="cfg-sms">
+                                    <span>Enable SMS broadcast alerts (opt-in)</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" id="btn-save-cfg" class="btn btn-primary btn-block">
+                                <i data-lucide="save"></i>
+                                <span>Update Alerting Rules</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 7: SUPPORT & USER FEEDBACK DESK -->
+            <!-- ============================================================ -->
+            <section id="tab-tickets" class="tab-pane">
+                <div class="card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3 class="card-title">Support & Environmental Incident Tickets</h3>
+                            <p class="card-subtitle">Report sensor anomalies, suggest feature enhancements, or log field observations</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openNewTicketModal()">
+                            <i data-lucide="plus-circle"></i>
+                            <span>Submit New Incident Ticket</span>
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table" id="tickets-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Author</th>
+                                    <th>Station Scope</th>
+                                    <th>Logged Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tickets-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- TAB 8: CLUSTER HEALTH & INFRASTRUCTURE MONITOR -->
+            <!-- ============================================================ -->
+            <section id="tab-system" class="tab-pane">
+                <div class="kpi-grid">
+                    <div class="kpi-card glow-cyan">
+                        <div class="kpi-icon-wrap bg-cyan-dim"><i data-lucide="server" class="text-cyan"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Uptime SLA</span>
+                            <div class="kpi-val-row"><span class="kpi-value text-cyan" id="sys-uptime">99.98%</span></div>
+                            <span class="kpi-context">Continuous operation since deployment</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-emerald">
+                        <div class="kpi-icon-wrap bg-emerald-dim"><i data-lucide="hard-drive" class="text-emerald"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">HDFS Capacity</span>
+                            <div class="kpi-val-row"><span class="kpi-value text-emerald">2.0 TB Total</span></div>
+                            <span class="kpi-context" id="sys-storage-used">Loading storage usage...</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-amber">
+                        <div class="kpi-icon-wrap bg-amber-dim"><i data-lucide="cpu" class="text-amber"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">CPU Telemetry</span>
+                            <div class="kpi-val-row"><span class="kpi-value text-amber" id="sys-cpu">--</span></div>
+                            <span class="kpi-context">8 Worker Cores Allocated</span>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glow-purple">
+                        <div class="kpi-icon-wrap bg-purple-dim"><i data-lucide="memory-stick" class="text-purple"></i></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">Memory Usage</span>
+                            <div class="kpi-val-row"><span class="kpi-value text-purple" id="sys-mem">--</span></div>
+                            <span class="kpi-context">Cluster-wide RAM utilization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3 class="card-title">Hadoop Cluster Architecture & DataNode Map</h3>
+                            <p class="card-subtitle">Active distributed nodes across geographical racks</p>
+                        </div>
+                        <span class="badge badge-success" id="sys-hdfs-status">ACTIVE_HEALTHY</span>
+                    </div>
+
+                    <div class="cluster-summary-grid" style="margin-bottom: 16px;">
+                        <div class="stat-mini-card">
+                            <span class="mini-label">DataNodes Online</span>
+                            <span class="mini-val text-cyan" id="sys-datanodes">4 / 4</span>
+                        </div>
+                        <div class="stat-mini-card">
+                            <span class="mini-label">Last Backup</span>
+                            <span class="mini-val text-emerald" id="sys-backup">--</span>
+                        </div>
+                    </div>
+                    
+                    <div class="nodes-grid">
+                        <div class="node-box online">
+                            <div class="node-header">
+                                <strong>DN-01-NORTH</strong>
+                                <span class="badge badge-success">ONLINE</span>
+                            </div>
+                            <div class="node-meta">Rack: /rack-1 | IP: 10.0.1.101</div>
+                            <div class="node-meta">Capacity: 500 GB</div>
+                        </div>
+
+                        <div class="node-box online">
+                            <div class="node-header">
+                                <strong>DN-02-WEST</strong>
+                                <span class="badge badge-success">ONLINE</span>
+                            </div>
+                            <div class="node-meta">Rack: /rack-1 | IP: 10.0.1.102</div>
+                            <div class="node-meta">Capacity: 500 GB</div>
+                        </div>
+
+                        <div class="node-box online">
+                            <div class="node-header">
+                                <strong>DN-03-SOUTH</strong>
+                                <span class="badge badge-success">ONLINE</span>
+                            </div>
+                            <div class="node-meta">Rack: /rack-2 | IP: 10.0.1.103</div>
+                            <div class="node-meta">Capacity: 500 GB</div>
+                        </div>
+
+                        <div class="node-box online">
+                            <div class="node-header">
+                                <strong>DN-04-EAST</strong>
+                                <span class="badge badge-success">ONLINE</span>
+                            </div>
+                            <div class="node-meta">Rack: /rack-2 | IP: 10.0.1.104</div>
+                            <div class="node-meta">Capacity: 500 GB</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- New Ticket Modal -->
+    <div class="modal-overlay" id="ticket-modal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit Incident / Feedback Ticket</h3>
+                <button class="modal-close" onclick="closeNewTicketModal()">&times;</button>
+            </div>
+            <form id="new-ticket-form" onsubmit="submitNewTicket(event)">
+                <div class="form-group">
+                    <label class="form-label">Subject / Title:</label>
+                    <input type="text" id="tck-title" class="form-input" placeholder="Brief summary of issue or request..." required>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Category:</label>
+                        <select id="tck-category" class="form-select">
+                            <option value="Sensor Calibration">Sensor Calibration</option>
+                            <option value="Data Discrepancy">Data Discrepancy</option>
+                            <option value="Infrastructure">Infrastructure / Hadoop</option>
+                            <option value="Feature Request">Feature Request</option>
+                            <option value="General Inquiry">General Inquiry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Priority:</label>
+                        <select id="tck-priority" class="form-select">
+                            <option value="LOW">LOW</option>
+                            <option value="MEDIUM" selected>MEDIUM</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Weather Station Scope:</label>
+                    <select id="tck-station" class="form-select">
+                        <option value="GLOBAL">Global / Multi-Station</option>
+                        <option value="WS-ARC-01">WS-ARC-01 (Svalbard Arctic)</option>
+                        <option value="WS-SAH-02">WS-SAH-02 (Kufra Sahara)</option>
+                        <option value="WS-AMZ-03">WS-AMZ-03 (Manaus Canopy)</option>
+                        <option value="WS-NAT-04">WS-NAT-04 (Azores Buoy)</option>
+                        <option value="WS-IND-05">WS-IND-05 (Gulf of Thailand)</option>
+                        <option value="WS-HIM-06">WS-HIM-06 (Khumbu Glacier)</option>
+                        <option value="WS-EUR-07">WS-EUR-07 (Paris Basin)</option>
+                        <option value="WS-NAC-08">WS-NAC-08 (Great Lakes)</option>
+                        <option value="WS-SAH-09">WS-SAH-09 (Niamey Sahelian)</option>
+                        <option value="WS-AUS-10">WS-AUS-10 (Alice Springs)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Detailed Description:</label>
+                    <textarea id="tck-desc" class="form-textarea" rows="4" placeholder="Provide environmental context, sensor reading offsets, or observation notes..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeNewTicketModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Entrypoint -->
+    <script src="/web/app.js"></script>
+</body>
+</html>
